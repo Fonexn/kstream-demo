@@ -1,0 +1,81 @@
+spring:
+  cloud:
+    stream:
+      bindings:
+        firstKStreamOut:
+          destination: test_demo_first_aggregated_topic
+          binder: kafka1
+        firstKStreamIn:
+          destination: test_demo_first_inbound
+          group: test_demo_first_inbound_group
+          binder: kafka1
+        secondKStreamOut:
+          destination: test_demo_second_aggregated_topic
+          binder: kafka2
+        secondKStreamIn:
+          destination: test_demo_second_inbound
+          group: test_demo_second_inbound_group
+          binder: kafka2
+      binders:
+        kafka1:
+          type: kstream
+          environment:
+            spring:
+              cloud:
+                stream:
+                  kafka:
+                    streams:
+                      bindings:
+                        firstKStreamIn:
+                          consumer:
+                            application-id: ID1
+                      binder:
+                        application-id: ID2
+                        autoAddPartitions: true
+                        minPartitionCount: 3
+                        replicationFactor: 1
+                        serdeError: logAndContinue
+                        brokers: localhost:9092
+                        configuration:
+                          acks: all
+                          compression.type: gzip
+                          max.request.size: 104857600
+                          cache.max.bytes.buffering: 104857600
+                          commit.interval.ms: 10000
+                          windowstore.changelog.additional.retention.ms: 86400000
+                          processing.guarantee: exactly_once
+                          replication.factor: 1
+                          default:
+                            key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+                            value.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+        kafka2:
+          type: kstream
+          environment:
+            spring:
+              cloud:
+                stream:
+                  kafka:
+                    streams:
+                      bindings:
+                        secondKStreamIn:
+                          consumer:
+                            application-id: ID3
+                      binder:
+                        application-id: ID4
+                        autoAddPartitions: true
+                        minPartitionCount: 3
+                        replicationFactor: 1
+                        serdeError: logAndContinue
+                        brokers: localhost:9092
+                        configuration:
+                          acks: all
+                          compression.type: gzip
+                          max.request.size: 104857600
+                          cache.max.bytes.buffering: 104857600
+                          commit.interval.ms: 20000
+                          windowstore.changelog.additional.retention.ms: 86400000
+                          processing.guarantee: exactly_once
+                          replication.factor: 1
+                          default:
+                            key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+                            value.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
