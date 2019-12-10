@@ -18,9 +18,9 @@ public interface KStreamsBinding {
   String SECOND_KSTREAM_OUT = "secondKStreamOut";
   String SECOND_KSTREAM_IN = "secondKStreamIn";
 
-  @Input(SECOND_KSTREAM_OUT)
-  KStream<?, ?> secondKStreamOut();
-
-  @Output(SECOND_KSTREAM_IN)
+  @Input(SECOND_KSTREAM_IN)
   KStream<?, ?> secondKStreamIn();
+
+  @Output(SECOND_KSTREAM_OUT)
+  KStream<?, ?> secondKStreamOut();
 }
